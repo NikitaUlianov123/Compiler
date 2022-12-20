@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FishCompiler": {
+      "commandName": "Project",
+      "commandLineArgs": "\"\\\\GMRDC1\\Folder Redirection\\Nikita.Ulianov\\Documents\\Github\\FishCompiler\\Program.txt\""
+    }
+  }
+}
