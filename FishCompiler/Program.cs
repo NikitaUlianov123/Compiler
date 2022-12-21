@@ -7,7 +7,8 @@
         variableName,
         Operator,
         bracket,
-        number
+        number,
+        text
     };
     
     internal class Program
@@ -20,9 +21,13 @@
 
             string program = System.IO.File.ReadAllText(args[0]);
 
+            const int quoteIndex = 7;
+
             string[] keywords = { "if", "else", "true", "false" };
             string[] variableTypes = { "int", "double", "string" };
-            string[] operators = { "+", "-", "*", "/", "=", "=?", "!=", "(", ")", "\"", ";", "{", "}", "[", "]", "=+", "-=", "*=", "/=", "?" };
+            string[] operators = { "+", "-", "*", "/", "=", "=?", "!=", "\"", ";", "+=", "-=", "*=", "/=", "?" };
+            string[] brackets = { "(", ")", "{", "}", "[", "]"};
+            string[] whitespace = { " ", "\r", "\n" };
 
             string current = "";
 
@@ -34,40 +39,45 @@
                     current = "";
                     current += program[++i];
                 }
+                if (current == operators[quoteIndex])
+                {
+                    tokens.Add((current, Classification.Operator));
+                    current = "";
+                    while (program[i + 1].ToString() != operators[quoteIndex])
+                    {
+                        current += program[++i];
+                    }
+                    tokens.Add((current, Classification.text));
+                    current = operators[quoteIndex];
+                    i++;
+                }
 
-                foreach (string keyword in keywords)
+                if (keywords.Contains(current))
                 {
-                    if (current == keyword)
-                    {
-                        tokens.Add((current, Classification.keyword));
-                        current = "";
-                        break;
-                    }
+                    tokens.Add((current, Classification.keyword));
+                    current = "";
                 }
-                foreach (string variableType in variableTypes)
+                if (variableTypes.Contains(current))
                 {
-                    if (current == variableType)
-                    {
-                        tokens.Add((current, Classification.variableType));
-                        current = "";
-                        break;
-                    }
+                    tokens.Add((current, Classification.variableType));
+                    current = "";
                 }
-                foreach (string Operator in operators)
+                if (operators.Contains(current) && (i < program.Length - 1 ? !operators.Contains(current + program[i + 1]) : true))
                 {
-                    if (current == Operator && (i < program.Length - 1 ? !operators.Contains(current + program[i + 1]) : true))
-                    {
-                        tokens.Add((current, Classification.Operator));
-                        current = "";
-                        break;
-                    }
+                    tokens.Add((current, Classification.Operator));
+                    current = "";
                 }
-                if (current != "" && (program[i + 1] == ' ' || operators.Contains(program[i + 1].ToString())))
+                if (brackets.Contains(current))
+                {
+                    tokens.Add((current, Classification.bracket));
+                    current = "";
+                }
+                if (current != "" && (whitespace.Contains(program[i + 1].ToString()) || operators.Contains(program[i + 1].ToString()) || brackets.Contains(program[i + 1].ToString())) && !operators.Contains(current + program[i + 1]))
                 {
                     int number = 0;
                     if (int.TryParse(current, out number))
                     {
-                        tokens.Add((current, Classification.number));
+                        tokens.Add((number.ToString(), Classification.number));
                     }
                     else
                     {
