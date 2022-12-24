@@ -14,7 +14,7 @@ namespace FishCompiler
 
             const int quoteIndex = 7;
 
-            string[] keywords = { "if", "else", "true", "false" };
+            string[] keywords = { "if", "else", "true", "false", "while", "for" };
 
             string[] variableTypes = { "int", "double", "string" };
             string[] operators = { "+", "-", "*", "/", "=", "=?", "!=", "\"", ";", "+=", "-=", "*=", "/=", "." };
