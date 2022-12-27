@@ -9,7 +9,8 @@
         bracket,
         number,
         text,
-        comment
+        comment,
+        parser
     };
     
     internal class Program
