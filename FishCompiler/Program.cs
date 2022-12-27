@@ -25,7 +25,9 @@
 
             var tokens = tokeniser.tokenise(program);
 
-            ;
+            Parser parser = new Parser();
+
+            /*var tree = */parser.Parse(tokens);
         }
     }
 }

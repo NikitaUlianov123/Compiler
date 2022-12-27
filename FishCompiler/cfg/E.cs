@@ -25,18 +25,21 @@ namespace FishCompiler
             if (result.successful)
             {
                 tree.children.Add(result.result);
+                result.result.Parent = tree;
+
                 if (index < tokens.Count - 1)
                 {
                     if (tokens[index].classification == Classification.Operator && tokens[index].lexime == "+")
                     {
+                        tree.children.Add(new Node(tokens[index], tree));
                         index++;
-                        tree.children.Add(new Node(("+", Classification.Operator)));
 
                         var e = new E();
                         var result2 = e.Parse(tokens, ref index);
                         if (result2.successful)
                         {
                             tree.children.Add(result2.result);
+                            result2.result.Parent = tree;
                             return (true, tree);
                         }
 
@@ -45,14 +48,15 @@ namespace FishCompiler
                     }
                     else if (tokens[index].classification == Classification.Operator && tokens[index].lexime == "-")
                     {
+                        tree.children.Add(new Node(tokens[index], tree));
                         index++;
-                        tree.children.Add(new Node(("-", Classification.Operator)));
 
                         var e = new E();
                         var result2 = e.Parse(tokens, ref index);
                         if (result2.successful)
                         {
                             tree.children.Add(result2.result);
+                            result2.result.Parent = tree;
                             return (true, tree);
                         }
 
