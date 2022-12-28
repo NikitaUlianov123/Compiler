@@ -17,7 +17,8 @@ namespace FishCompiler
             string[] keywords = { "if", "else", "true", "false", "while", "for" };
 
             string[] variableTypes = { "int", "double", "string" };
-            string[] operators = { "+", "-", "*", "/", "=", "=?", "!=", "\"", ";", "+=", "-=", "*=", "/=", "." };
+            string[] operators = { "+", "-", "*", "/", "=", "\"", ";", "+=", "-=", "*=", "/=", ".", "!" };
+            string[] comparisons = { "=?", "!=", "<", ">", "<=", ">=" };
             string[] brackets = { "(", ")", "{", "}", "[", "]" };
             string[] whitespace = { " ", "\r", "\n", "\t" };
             string[] comments = { "//", "/*", "*/" };
@@ -80,9 +81,14 @@ namespace FishCompiler
                     tokens.Add((current, Classification.variableType));
                     current = "";
                 }
-                else if (operators.Contains(current) && (i < program.Length - 1 ? !(operators.Contains(current + program[i + 1]) || comments.Contains(current + program[i + 1])) : true))
+                else if (operators.Contains(current) && (i < program.Length - 1 ? !(operators.Contains(current + program[i + 1]) || comparisons.Contains(current + program[i + 1]) || comments.Contains(current + program[i + 1])) : true))
                 {
                     tokens.Add((current, Classification.Operator));
+                    current = "";
+                }
+                else if (comparisons.Contains(current) && (i < program.Length - 1 ? !comparisons.Contains(current + program[i + 1]) : true))
+                {
+                    tokens.Add((current, Classification.comparison));
                     current = "";
                 }
                 else if (brackets.Contains(current))
@@ -90,7 +96,7 @@ namespace FishCompiler
                     tokens.Add((current, Classification.bracket));
                     current = "";
                 }
-                else if (current != "" && i < program.Length - 1 && (whitespace.Contains(program[i + 1].ToString()) || operators.Contains(program[i + 1].ToString()) || brackets.Contains(program[i + 1].ToString())) && !operators.Contains(current + program[i + 1]) && !comments.Contains(current + program[i + 1]))
+                else if (current != "" && i < program.Length - 1 && (whitespace.Contains(program[i + 1].ToString()) || operators.Contains(program[i + 1].ToString()) || comparisons.Contains(program[i + 1].ToString()) || brackets.Contains(program[i + 1].ToString())) && !operators.Contains(current + program[i + 1]) && !comparisons.Contains(current + program[i + 1]) && !comments.Contains(current + program[i + 1]))
                 {
                     int number;
                     if (int.TryParse(current, out number))

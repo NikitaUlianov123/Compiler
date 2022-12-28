@@ -6,22 +6,12 @@ using System.Threading.Tasks;
 
 namespace FishCompiler
 {
-    public class E
+    public static class E
     {
-        private enum states
-        {
-            Add,
-            Subtract,
-            EPrime
-        }
-
-        private states state = 0;
-
-        public (bool successful, Node result) Parse(List<(string lexime, Classification classification)> tokens, ref int index)
+        public static (bool successful, Node result) Parse(List<(string lexime, Classification classification)> tokens, ref int index)
         {
             Node tree = new Node(("E", Classification.parser));
-            var ePrime = new E1();
-            var result = ePrime.Parse(tokens, ref index);
+            var result = E1.Parse(tokens, ref index);
             if (result.successful)
             {
                 tree.children.Add(result.result);
@@ -34,8 +24,7 @@ namespace FishCompiler
                         tree.children.Add(new Node(tokens[index], tree));
                         index++;
 
-                        var e = new E();
-                        var result2 = e.Parse(tokens, ref index);
+                        var result2 = E.Parse(tokens, ref index);
                         if (result2.successful)
                         {
                             tree.children.Add(result2.result);
@@ -51,8 +40,7 @@ namespace FishCompiler
                         tree.children.Add(new Node(tokens[index], tree));
                         index++;
 
-                        var e = new E();
-                        var result2 = e.Parse(tokens, ref index);
+                        var result2 = E.Parse(tokens, ref index);
                         if (result2.successful)
                         {
                             tree.children.Add(result2.result);
@@ -65,7 +53,7 @@ namespace FishCompiler
                     }
                     else
                     {
-                        return (false, tree);
+                        return (true, tree);
                     }
                 }
                 else

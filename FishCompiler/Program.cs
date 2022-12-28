@@ -6,11 +6,13 @@
         variableType,
         variableName,
         Operator,
+        comparison,
         bracket,
         number,
         text,
         comment,
-        parser
+        parser,
+        conditional
     };
     
     internal class Program
@@ -25,9 +27,8 @@
 
             var tokens = tokeniser.tokenise(program);
 
-            Parser parser = new Parser();
-
-            /*var tree = */parser.Parse(tokens);
+            int number = 0;
+            /*var tree = */Parser.Parse(tokens, ref number);
         }
     }
 }

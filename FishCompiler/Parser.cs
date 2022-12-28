@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,11 +19,6 @@ namespace FishCompiler
         {
             children = new List<Node>();
         }
-        public Node(Node parent)
-        {
-            Parent = parent;
-            children = new List<Node>();
-        }
         public Node((string lexime, Classification classification) token)
         {
             children = new List<Node>();
@@ -35,27 +32,15 @@ namespace FishCompiler
         }
     }
 
-    public class Parser
+    public static class Parser
     {
-        public void Parse(List<(string lexime, Classification classification)> tokens)
+        public static void Parse(List<(string lexime, Classification classification)> tokens, ref int start)
         {
             Node root = new Node();
 
-            List<(string lexime, Classification classification)> current = new List<(string lexime, Classification classification)>();
-            for (int i = 0; i < tokens.Count && (tokens[i].lexime != ";" && tokens[i].lexime != "{" && tokens[i].lexime != "}"); i++)
-            {
-                current.Add(tokens[i]);
-            }
+            Code.Parse(tokens, ref start);
 
-            E e = new E();
-
-            int index = 0;
-            var result = e.Parse(current, ref index);
-            if (result.successful)
-            {
-                root.children.Add(result.result);
-                result.result.Parent = root;
-            }
+            root.GetType();
         }
     }
 }
