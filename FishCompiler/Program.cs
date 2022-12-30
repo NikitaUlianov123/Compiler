@@ -28,7 +28,9 @@
             var tokens = tokeniser.tokenise(program);
 
             int number = 0;
-            /*var tree = */Parser.Parse(tokens, ref number);
+            var tree = Parser.Parse(tokens, ref number);
+
+            var analysis = Semantic.Analyse(tree);
         }
     }
 }

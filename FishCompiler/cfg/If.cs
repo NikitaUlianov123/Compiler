@@ -35,18 +35,28 @@ namespace FishCompiler
                             {
                                 tree.children.Add(new Node(tokens[index], tree));
                                 index++;
-                                
-                                var result2 = Code.Parse(tokens, ref index);
-                                if (result.successful)
+
+                                if (tokens[index].classification == Classification.bracket && tokens[index].lexime == "}")
                                 {
-                                    tree.children.Add(result2.result);
+                                    tree.children.Add(new Node(tokens[index], tree));
+                                    index++;
 
-                                    if (tokens[index].classification == Classification.bracket && tokens[index].lexime == "}")
+                                    return (true, tree);
+                                }
+                                else
+                                {
+                                    var result2 = Code.Parse(tokens, ref index, true);
+                                    if (result.successful)
                                     {
-                                        tree.children.Add(new Node(tokens[index], tree));
-                                        index++;
+                                        tree.children.Add(result2.result);
 
-                                        return (true, tree);
+                                        if (tokens[index].classification == Classification.bracket && tokens[index].lexime == "}")
+                                        {
+                                            tree.children.Add(new Node(tokens[index], tree));
+                                            index++;
+
+                                            return (true, tree);
+                                        }
                                     }
                                 }
 

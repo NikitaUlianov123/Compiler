@@ -11,7 +11,7 @@ namespace FishCompiler
     {
         public static (bool successful, Node result) Parse(List<(string lexime, Classification classification)> tokens, ref int index)
         {
-            Node tree = new Node();
+            Node tree = new Node(("assignment", Classification.parser));
 
             if (tokens[index].classification == Classification.variableType)
             {

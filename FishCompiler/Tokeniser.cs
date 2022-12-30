@@ -12,7 +12,7 @@ namespace FishCompiler
         {
             List<(string lexime, Classification classification)> tokens = new List<(string lexime, Classification classification)>();
 
-            const int quoteIndex = 7;
+            const int quoteIndex = 5;
 
             string[] keywords = { "if", "else", "true", "false", "while", "for" };
 
